@@ -1,4 +1,5 @@
 #pragma once
+#include <initializer_list>
 template <typename T>
 class Vector
 {
@@ -12,6 +13,17 @@ public:
 	{
 		m_array = new T[m_capacity];
 	}
+	Vector(std::initializer_list<T> list)
+	{
+		int list_size = list.size();
+		m_capacity = list_size;
+		m_size = list_size;
+		m_array = new T[list_size];
+		for (int i = 0; i < list_size; i++)
+		{
+			m_array[i] = *(list.begin() + i);
+		}
+	}
 	Vector(const Vector& other)
 	{
 		this->m_capacity = other.m_capacity;
@@ -22,6 +34,15 @@ public:
 			temp[i] = other.m_array[i];
 		}
 		m_array = temp;
+	}
+	Vector(const Vector&& other)
+	{
+		m_capacity = other.m_capacity;
+		m_size = other.m_size;
+		m_array = other.m_array;
+		other.m_array = nullptr;
+		other.m_capacity = 0;
+		other.m_size = 0;
 	}
 	Vector& operator=(const Vector& other)
 	{
@@ -36,7 +57,29 @@ public:
 		m_array = temp;
 		return *this;
 	}
-	T operator[](int index)
+	Vector& operator=(const Vector&& other)
+	{
+		if (this != &other)
+		{
+			m_capacity = other.m_capacity;
+			m_size = other.m_size;
+			delete[] m_array;
+			m_array = other.m_array;
+			other.m_array = nullptr;
+			other.m_capacity = 0;
+			other.m_size = 0;
+		}
+		return *this;
+	}
+	T operator[](int index) const
+	{
+		if (index >= m_size)
+		{
+			throw "Error";
+		}
+		return m_array[index];
+	}
+	T& operator[](int index)
 	{
 		if (index >= m_size)
 		{
