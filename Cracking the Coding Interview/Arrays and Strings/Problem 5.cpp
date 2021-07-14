@@ -10,14 +10,36 @@ bool OneEdit(std::string first, std::string second)
 	}
 	else if (difference == 1 || difference == -1)
 	{
-		if (first.find(second) || second.find(first))
+		for (int i = 0; i < first.size(); ++i)
 		{
-			return true;
+			for (int j = 0; j < second.size(); ++j)
+			{
+				if (first[i] == second[j])
+				{
+					first[i] = '0';
+					second[j] = '0';
+				}
+			}
 		}
-		else
+		int count = 0;
+		for (int i = 0; i < first.size() || i < second.size(); ++i)
 		{
-			return false;
+			if (i < first.size())
+			{
+				if (first[i] != '0')
+				{
+					++count;
+				}
+			}
+			if (i < second.size())
+			{
+				if (second[i] != '0')
+				{
+					++count;
+				}
+			}
 		}
+		return count == 1;
 	}
 	else if (first.size() == second.size())
 	{
