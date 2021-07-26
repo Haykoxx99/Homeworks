@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <initializer_list>
 template <typename T>
 class My_List
 {
@@ -16,6 +17,13 @@ private:
 	unsigned int m_size;
 public:
 	My_List() : head(nullptr), m_size(0) {}
+	My_List(std::initializer_list<T> list)
+	{
+		for (auto it:list)
+		{
+			push_back(it);
+		}
+	}
 	My_List(const My_List& other)
 	{
 		if (other.head == nullptr)
@@ -262,19 +270,19 @@ public:
 			return;
 		}
 		Node* first = head;
-		for (int i = 0; first->next != nullptr; ++i, first = first->next)
+		for (int i = 0; i < m_size - 1; ++i, first = first->next)
 		{
 			Node* second = first->next;
-			for (int j = 0; second != nullptr; ++j, second = second->next)
+			for (int j = i + 1; j < m_size; ++j)
 			{
 				if (first->m_value == second->m_value)
 				{
-					erase(i);
 					erase(j);
-					first = head;
 					i = 0;
+					first = head;
 					break;
 				}
+				second = second->next;
 			}
 		}
 	}
